@@ -1,4 +1,4 @@
-# CMS.340 G2 Group Project $ndash; Statistics
+# CMS.340 G2 Group Project &mdash; Statistics
 
 ## Jenny Goldsher, Noah Harvey, Deandra Martin, Hiroki Sato
 
