@@ -9,20 +9,17 @@
 ####  IMPORTS  #################################################################################################################
 
 import slack
-import os
-from pathlib import Path
-from dotenv import load_dotenv
 
 ####  GLOBALS  #################################################################################################################
 
-env = Path('.')/".env"
+token = ""
 
 ####  FUNCTIONS  ###############################################################################################################
 
 ####  MAIN  ####################################################################################################################
 
-load_dotenv(dotenv_path=env)
+def main():
+    bot = slack.WebClient(token=token)
+    bot.chat_postMessage(channel="#tutoring-bot",text="Hello World\nI come from tutorTest.py running on a cloud server!")
 
-bot = slack.WebClient(token=os.environ["TOKEN"])
-
-bot.chat_postMessage(channel="#tutoring-bot",text="Hello World\nI come from python3 running on a cloud server!")
+if(__name__=="__main__"): main()
