@@ -24,21 +24,21 @@ responses = ["Hey!", "Hi!", "What's up?", "Does this syntax make me look fat?", 
 ####  MAIN  ####################################################################################################################
 
 server = Flask(__name__)
-slackEvent = SlackEventAdapter(secret,"/slack/events",server)
+slackEvent = SlackEventAdapter(secret,"/slack/events",server)   #  authenticates provides url for events
 bot = slack.WebClient(token=token)
-botID = bot.api_call("auth.test")["user_id"]
+botID = bot.api_call("auth.test")["user_id"]                    #  save bot id so the bot knows if a message is its own
 
-@slackEvent.on("message")
+@slackEvent.on("message.channels")                              #  message.channels event
 def message(content):
     event = content.get("event", {})
     channel = event.get("channel")
     user = event.get("user")
     text = event.get("text")
 
-    print(content)
+    print(content)                                              #  print entire event (use for log (pipe))
 
-    if(user != botID):
+    if(user != botID):                                          #  post a genaric message
         bot.chat_postMessage(channel=channel,text=responses[int(random()*len(responses))])
 
 
-if(__name__=="__main__"): server.run(debug=True)
+if(__name__=="__main__"): server.run()                          #  might need to change debug to False
