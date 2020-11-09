@@ -28,7 +28,7 @@ slackEvent = SlackEventAdapter(secret,"/slack/events",server)   #  authenticates
 bot = slack.WebClient(token=token)
 botID = bot.api_call("auth.test")["user_id"]                    #  save bot id so the bot knows if a message is its own
 
-@slackEvent.on("message.channels")                              #  message.channels event
+@slackEvent.on("message")                                       #  message.channels event ("event"{"type":"message"})
 def message(content):
     event = content.get("event", {})
     channel = event.get("channel")
