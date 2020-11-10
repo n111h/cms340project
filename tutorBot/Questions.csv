@@ -1,0 +1,4 @@
+Question Typ,Question,A,B,C,D,Answer,Link
+Data Types,what is the data type of (variable name) ,int ,float,str,bool,,
+Data Types,how many buit-in data type are there in python,5,4,6,3,A,
+Basic Syntax,"what is the logical operator of ""and"" in condition ",&,|,!,%,&,
