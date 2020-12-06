@@ -1,0 +1,19 @@
+id,Question Type,Question,A,B,C,D,Answer,Link
+1,iData Type,what is the data type of (variable name)?,int,float,str,bool,TBD,http://greenteapress.com/thinkpython/html/thinkpython003.html#toc12
+2,Data Type,how many buit-in data type are there in python,5,4,6,3,A,http://greenteapress.com/thinkpython/html/thinkpython003.html#toc12
+3,Syntax,"what is the formal form of logical operator: ""and""? ",&&,||,!,%,A,
+4,Syntax,Tell me about = and == !,"""="" is used for assignment and ""=="" is used for equality","""="" is used for equality and ""=="" is used for assignment","both ""="" and ""=="" can be used as equality ","both ""="" and ""=="" can be used as assignment",A,http://greenteapress.com/thinkpython/html/thinkpython003.html#toc13
+5,Syntax,What do we have to have after () in function declaration?,Semicolon(;),Colon(:),Period(.),Exclamation mark(!),B,
+6,Data Type,Are 67 and '67' same,Yes,No,,,B,
+7,Syntax,** arithmatic expression represents…,multiplication by 2,Exponents,multiplication,"Nothing, it is an invalid arithmatic operator",B,
+8,Data Type,Can you contain different types of data in a list?,Yes,No,,,Yes,
+9,Data Type,How can you store additional values to Python's list?,use append(),use add(),You can't add anything to a Python's list once it's initialized with some values,,A,
+10,Syntax,Is indentation important in Python?,Yes it is important because it would make my code look nicer,Yes it is very important so that we and python can identify code blocks,"No, Python doesn't care, they can handle anything","No, because we can use semicolons and parentheses",B,
+11,Generic,Who invented Python?,Alan Turing,Alan Kays,Guido van Rossum,Steve Jobs,C,
+12,Data Type,Explain String Concatenation,Python allows us to combine two different strings using + and = operators,"Python allows us to add and subtract two different strings using +, -, and = operator",Python allows you to change modify the string once it is declared,,A,
+13,Data Type,What is the return type of this function?,int ,float,str,bool,(Depends on the parsing code),
+14,Data Type,the first index of a list starts from 1,TRUE,FALSE,,,FALSE,
+15,Syntax,we create chained condition using…,keyword: elif,keyword: else if,keyword: if ,keyword: else,A or D,http://greenteapress.com/thinkpython/html/thinkpython006.html#toc57
+16,Generic,Does Python require compiler?,Sometimes,Yes,No,Depends,C,
+17,Syntax,print 3.4. Is this a valid syntax?,Yes it is a valid syntax,No because you have white space in between, No because you don't have parentheses around,Yes Python does not care,C
+18,Data Type,Identify int value,4,'4',4.0,[4],A,
