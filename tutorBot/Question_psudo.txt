@@ -1,0 +1,37 @@
+
+
+the structure of the Qeustion component: Function Generate Questions. 
+
+    Input: a two dimensional list
+    
+        Objective of generate question, create a question
+        There are syntax question, data type quetion and generic quesiton
+        
+        1. first thing we can do is to check the current questions we have.
+        2. we can iterate through the two dimensional list and check for number of spaces
+            Flag a indentation boolean if...
+                a. the number of space is not multiple of 4,
+                b. the number of space is multiple of 4 but, the number of space does not match with the next line and 
+                   the previous line although the last character is not : 
+                   
+        3. if we see the flag for the syntax question then create a syntax question. with id 10 question about the indentation
+            (this can be done before any loop)
+            
+            ** also having a list of keyword that we want to be paying attention might be a good idea.
+            keyword = ["'", "if", "else", "def"] 
+            matching of parenthesis to figure out if we need another syntax question. 
+        4. let's iterate throught the two dimensional list one by one. 
+            
+            processing the row. 
+            
+            1. we want to catch the assignment of values (iData Type) question
+                so we want to have a catch in = but make sure in the condition that it is actually the assignment by looking at the previous and the next 
+                
+                if type of the value was list, we could generate more questions on list
+            
+            2. if the current element that we are looking at is in the list of keyword then create syntax questions
+            
+            3. Generic is kindo of like a fun trivia quesiton so create the question at least one. 
+            
+            
+    
