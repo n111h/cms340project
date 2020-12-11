@@ -12,14 +12,15 @@ from random import random
 import slack
 from flask import Flask
 from slackeventsapi import SlackEventAdapter
+from tutorParser import callSplit
+from tutorQuestions import generate_questions
 
 ####  GLOBALS  #################################################################################################################
 
 token = ""
 secret = ""
-responses = ["Hey!", "Hi!", "What's up?", "Does this syntax make me look fat?", "That's Tudor to you!", "Genaric response"]
-block = '{"text": "Question text","fallback":"Question text fallback","callback_id":"question_id","attachment_type":"default",'
-block += '"actions":[{"name":"ans","text":"A","type":"button","value":"a"}{"name":"ans","text":"B","type":"button","value":"b"}'
+#responses = ["Hey!", "Hi!", "What's up?", "Does this syntax make me look fat?", "That's Tudor to you!", "Genaric response"]
+conversations = {}
 
 ####  FUNCTIONS  ###############################################################################################################
 
@@ -33,35 +34,106 @@ botID = bot.api_call("auth.test")["user_id"]                    #  save bot id s
 @slackEvent.on("message")                                       #  message.channels event ("event"{"type":"message"})
 def message(content):
     event = content.get("event", {})
-    print(content,event,sep='\n')                               #  print entire event (use for log (pipe))
-
     channel = event.get("channel")
     user = event.get("user")
+    text = event.get("text")
+    
+    print(content,event,channel,user,text,sep='\n')                                                            ##  DEBUGGING  ##
 
-    if(user != botID):                                          #  post a genaric message
-        bot.chat_postMessage(channel=channel,text=(responses[int(random()*len(responses))]),)
+    if(user != botID):
+        if(user not in conversations):                          #  first message/welcome
+            welcome = "Welcome to the tutor bot - message code blocks to generate questions"
+            bot.chat_postMessage(channel=channel,text=welcome)
+            conversations[user] = [False,[],[text,welcome]]
+        elif("```" in text):                                    #  code block in message
+            textSplit = text.split("```")
+            if(len(textSplit) == 3):                            #  single code block
+                codeLines = callSplit(textSplit[1])
+                print(codeLines)                                                                               ##  DEBUGGING  ##
+                #conversations[user][1] = generate_questions(codeLines)      #  not working on my computer
+                #question = conversations[user][1].pop(0)                    #  not working on my computer
+                conversations[user][0] = 'A'                                 #  for debugging (really want ans letter)
+                questionText = "test question (answer A) A. B. C. D."        #  for debugging (really want question text)
+                conversations[user][2].append(text)
+                conversations[user][2].append(questionText)
+                bot.chat_postMessage(channel=channel,text=questionText)
+            else:                                               #  unexpected number of code blocks
+                textError = "I'm sorry, I couldn't find your code"
+                conversations[user][2].append(text)
+                conversations[user][2].append(textError)
+                conversations[user][0] = False
+                bot.chat_postMessage(channel=channel,text=textError)
+        elif(conversations[user][0]):                           #  value (or, not False) in index 0 (answer)
+            if(conversations[user][0] in text.upper()):         #  answer letter in message text
+                correct = "That's correct!"
+                conversations[user][2].append(text)
+                conversations[user][2].append(correct)
+                bot.chat_postMessage(channel=channel,text=correct)
+                if(len(conversations[user][1]) > 0):            #  if there are still questions to ask
+                    #conversations[user][1] = generate_questions(codeLines)  #  not working on my computer
+                    #question = conversations[user][1].pop(0)                #  not working on my computer
+                    conversations[user][0] = 'A'                             #  for debugging (really want ans letter)
+                    questionText = "test question (answer A) A. B. C. D."    #  for debugging (really want question text)
+                    conversations[user][2].append(text)
+                    conversations[user][2].append(questionText)
+                    bot.chat_postMessage(channel=channel,text=questionText)
+                else:                                           #  no questions left to ask
+                    conversations[user][0] = False
+                    prompt = "Post a code block to generate questions"
+                    conversations[user][2].append(text)
+                    conversations[user][2].append(prompt)
+                    conversations[user][0] = False
+                    bot.chat_postMessage(channel=channel,text=prompt)
+            else:
+                incorrect = "I'm sorry, I don't think that's right."
+                conversations[user][2].append(text)
+                conversations[user][2].append(incorrect)
+                bot.chat_postMessage(channel=channel,text=incorrect)
+                if(len(conversations[user][1]) > 0):            #  if there are still questions to ask
+                    #conversations[user][1] = generate_questions(codeLines)      #  not working on my computer
+                    #question = conversations[user][1].pop(0)                    #  not working on my computer
+                    conversations[user][0] = 'A'                                 #  for debugging (really want ans letter)
+                    questionText = "test question (answer A) A. B. C. D."        #  for debugging (really want question text)
+                    conversations[user][2].append(text)
+                    conversations[user][2].append(questionText)
+                    bot.chat_postMessage(channel=channel,text=questionText)
+                else:                                           #  no questions left to ask
+                    conversations[user][0] = False
+                    prompt = "Post a code block to generate questions"
+                    conversations[user][2].append(text)
+                    conversations[user][2].append(prompt)
+                    conversations[user][0] = False
+                    bot.chat_postMessage(channel=channel,text=prompt)
+        else:                                                   #  no code block in message, or question posed - prompt
+            prompt = "Post a code block to generate questions"
+            conversations[user][2].append(text)
+            conversations[user][2].append(prompt)
+            conversations[user][0] = False
+            bot.chat_postMessage(channel=channel,text=prompt)
+
+        #bot.chat_postMessage(channel=channel,text=(responses[int(random()*len(responses))]),)
             
 
-@slackEvent.on("app_mention")
-def mention(content):
-    event = content.get("event", {})
-    print(content,event,sep='\n')
+# @slackEvent.on("app_mention")
+# def mention(content):
+#     event = content.get("event", {})
+#     print(content,event,sep='\n')
 
-    channel = event.get("channel")
-    user = event.get("user")
+#     channel = event.get("channel")
+#     user = event.get("user")
 
-    bot.chat_postEphemeral(channel=channel,text="this is a response to a message",user=user,blocks=block)
+#     bot.chat_postEphemeral(channel=channel,text="this is a response to a message",user=user,blocks=block)
 
 
-@slackEvent.on("message.app_home")
-def privateMessage(content):
-    event = content.get("event", {})
-    print(content,event,sep='\n')
+# @slackEvent.on("message.app_home")
+# def privateMessage(content):
+#     event = content.get("event", {})
+#     print(content,event,sep='\n')
 
-    channel = event.get("channel")
-    user = event.get("user")
+#     channel = event.get("channel")
+#     user = event.get("user")
 
-    bot.chat_postEphemeral(channel=channel,text="this is a response to a message",user=user,blocks=block)
+#     bot.chat_postEphemeral(channel=channel,text="this is a response to a message",user=user,blocks=block)
 
 
 if(__name__=="__main__"): server.run()                          #  might need to change debug to False
