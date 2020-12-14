@@ -1,14 +1,20 @@
+#!/usr/bin/python3
+
 ################################################################################################################################
 #  NAME:  Jenny Goldsher, Noah Harvey, Deandra Martin, Hiroki Sato
 #  DATE:  09112020
 #  IDEA:  opens questions file and generates questions
+#       There are certain types of questions that must be created depending on the syntax error that they make or 
+#       what they implement within the codeblock. For example, syntax question about the indentation is always created when user 
+#       used wrong indentation. 
+
 ################################################################################################################################
-# Tutor bot importing tutorBot 
 
 ####  IMPORTS  #################################################################################################################
 import pandas as pd
-from random import randint
+from random import randint, choice
 from ast import literal_eval
+import tutor_Parser
 ####  GLOBALS  #################################################################################################################
 question_df = pd.read_csv('Questions_11_27.csv')
 existing_q_id = []
@@ -20,13 +26,17 @@ data_types = ['int','str','float','bool','list']
                                                                                                    # 'Question Type' as index and we can extract the matching   
                                                                                                    # question according to the input we'll receive
                                                                                                    
+
+
 ####  FUNCTIONS  ###############################################################################################################
 ################################################################################################################################
-################################################################################################################################
+#### check_question ############################################################################################################
 
-# check_questions is going to iterate through the questions list and return a list of integers which represents the unique question ids.
-#   input: list of questions
-#   output: list of integers.
+# Input: list of questions 
+# Output list that contains question id
+# Objective: iterate through the list of questions created and record the existing_question_id so that we can keep track of what questions can be created and 
+# what questions should not be created
+
 
 def check_question(questions):
     
@@ -42,7 +52,7 @@ def check_question(questions):
     return existing_q_id
     
     
-################################################################################################################################
+
 ################################################################################################################################
 #### check_indent function #####################################################################################################
 
@@ -56,7 +66,7 @@ def check_indent(lines):
     # local variable flag, if anything weird didn't happen then this function will return True
     flag = True
     
-    for line in range(len(lines)):                                                                        # iterating through the 2-d list
+    for line in range(len(lines)):                                                                 # iterating through the 2-d list
         
         cur = lines[line]
 
@@ -80,73 +90,80 @@ def check_indent(lines):
     return flag
 
 ################################################################################################################################
-################################################################################################################################
+#### create_iData_type function ################################################################################################
 
-# create_iData_type function 
 # Input: list which is the entire row in the two-d list and an int which is an index of '='
-# Output: dictionary which is a question, and choices and its answer. 
+# Output: dictionary which is a question, and choices and its answer and link to the feedback
+# Objective: create a iData type question
 
 def create_iData_type(line, index):
     
-    # get the iData_type question as list
+    # get the iData_type question as dictionary
     question = question_df.set_index('Question Type').loc['iData Type'].to_dict()
     question_df.reset_index()
-    print(question)
+    print(question)                                                                                # debugging
     choices = data_types
     answer = question['Answer']
-    print(choices)                                                                                 # debugging 
-
+    print(choices)                                                                                 # debugging
+    # list to keep track of data type that was chosen as the 
+    chosen = []
 
     # getting the variable name and getting the data_type of variable. 
     variable_name = line[index - 1]
     variable_type = type(literal_eval(line[index + 1]))
 
-    
-    # print(variable_name, variable_type)
+    # print(variable_name, variable_type)                                                          # debugging 
     
     if variable_type == str:
 
         # modifying the question choice to avoid overlap
         answer = 'str'
-        choices.remove(answer)
-
-    elif variable_type == int:
-        answer = 'int'
         
-    elif variable_type == float:
+        
+    if variable_type == int:
+        answer = 'int'
+
+        
+    if variable_type == float:
         answer = 'float'
         
-    elif variable_type == list:
+    if variable_type == bool:
+        answer = 'boolean'
+
+    if variable_type == list:
         answer = 'list'
-    
+        
+    print("Answer", answer)
     
     # using ascii value, selecting the key to put the answer and place the answer. 
     answer_key = chr(65 + randint(0,3))
+    chosen.append(answer)
     question[answer_key] = answer
     question['Answer'] = answer_key
-        
-        # selecting the rest of the answers. 
+    print("Printing chosen", chosen)
+    
+    # selecting the rest of the answers. 
     for i in range(3):
+        
         key = chr(65 + randint(0,3))
         
         while key == answer_key:
             key = chr(65 + randint(0,3))
             
-        choice = choices[randint(0,len(choices)-1)]
-        question[key] = choice
-        choices.remove(choice)
+        
+        dummy = choice(choices)
+        
+        while dummy in chosen:
+            dummy = choice(choices)
+        
+        chosen.append(dummy)
+        question[key] = dummy
+        
     
     # modify the question sentence
     question['Question'] = question['Question'].replace("(variable name)",variable_name)
     
     return question
-    
-    # set the question choices
-    # select each choice by random from the 
-    #for x in range(2, 6):
-        
-    
-    
 
 
 ################################################################################################################################
@@ -201,23 +218,35 @@ def generate_questions(term_lists):
             if (t == '=' and iData_type == True):
                 # print('Creating data type question')          
                 # create a data type question.
+                
                 dtq = question_df.set_index('Question Type').loc['Data Type']
                 question_df.reset_index()
-                question = dtq.iloc[randint(0, len(dtq) - 1)].to_dict()
+                question = dtq.iloc[randint(0, len(dtq) - 1)]
+                
+                
                 while question['id'] in existing_q_id:
-                    question = dtq.iloc[randint(0, len(dtq) - 1)].to_dict()
-                    questions.append(question)
+                    question = dtq.iloc[randint(0, len(dtq) - 1)]
+                   
+                    q = question.to_dict()
+                
+                q = question.to_dict()
+                questions.append(question)
                 continue
             
             if (t in syntax_list):
                 
                 # create syntax question
+                
                 stq = question_df.set_index('Question Type').loc['Syntax']
                 question_df.reset_index()
-                question = stq.iloc[randint(0, len(stq) - 1)].to_dict()
+                question = stq.iloc[randint(0, len(stq) - 1)]
+                
                 while question['id'] in existing_q_id:
-                    question = stq.iloc[randint(0, len(stq) - 1)].to_dict()
-                    questions.append(question)
+                    question = stq.iloc[randint(0, len(stq) - 1)]
+                    
+                 
+                q = question.to_dict()
+                questions.append(question)
                 continue
         
         
@@ -230,6 +259,7 @@ def generate_questions(term_lists):
     
     # after going through everything and you don't have enough question, add one generic question.
     if len(questions) < 4:
+        
         gnq = question_df.set_index('Question Type').loc['Generic']
         question_df.reset_index()
         question = gnq.iloc[randint(0, len(gnq) - 1)].to_dict()
@@ -237,27 +267,25 @@ def generate_questions(term_lists):
         
     return questions
 
-################################################################################################################################
-################################################################################################################################
-# function to examine the tokens and flag what type of questions can be created.
 
-"""
-    input: tokens, list of questions.
-    output: a question in a python list
     
-"""
+
+####  MAIN  ####################################################################################################################
 
 def main():
+    
+    
+    user_inp = "```def func_one():\n    x = 15\n     y = 12 + x\n  for i in range(10):```"
 
-    ## parser =(['def','say_hello','(','count',')','TabF','for','i'....])
-    token = ['def', 'say_hello', '()',':']
-    term = [
-            [0,"def","say_hello","(",")",":"],
-            [0,'x','=',"'hello'"]
-            ]
-    print(generate_questions(term))
-
-if(__name__=="__main__"): 
-    print(question_df.set_index('Question Type').loc['Syntax'].iloc[4])
-    main()
-    #print(chr(65 + randint(0,3)))
+    if tutor_Parser.is_valid(user_inp) == True:
+        
+        user_inp = user_inp[3 : len(user_inp)-3]
+        # terms = tutor_Parser.callSplit(user_inp)
+    
+        questions = generate_questions(tutor_Parser.callSplit(user_inp))
+        print(questions)
+    else:
+        print("invalid input")
+        print(questions)
+    
+if(__name__=="__main__"): main()
