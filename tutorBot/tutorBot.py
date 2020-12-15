@@ -24,6 +24,18 @@ conversations = {}
 
 ####  FUNCTIONS  ###############################################################################################################
 
+def questionUnpacker(q):
+    qText = q["Question"]
+    if('A' in q):
+        qText += ("\nA. " + q['A'])
+    if('B' in q):
+        qText += ("\nB. " + q['B'])
+    if('C' in q):
+        qText += ("\nC. " + q['C'])
+    if('D' in q):
+        qText += ("\nD. " + q['D'])
+    return(qText)
+
 ####  MAIN  ####################################################################################################################
 
 server = Flask(__name__)
@@ -48,12 +60,16 @@ def message(content):
         elif("```" in text):                                    #  code block in message
             textSplit = text.split("```")
             if(len(textSplit) == 3):                            #  single code block
-                codeLines = callSplit(textSplit[1])
-                print(codeLines)                                                                               ##  DEBUGGING  ##
-                #conversations[user][1] = generate_questions(codeLines)      #  not working on my computer
-                #question = conversations[user][1].pop(0)                    #  not working on my computer
-                conversations[user][0] = 'A'                                 #  for debugging (really want ans letter)
-                questionText = "test question (answer A) A. B. C. D."        #  for debugging (really want question text)
+                codeLines = callSplit(textSplit[1])             #  parse code bloack with tutorParser
+                #print(codeLines)                                                                               ##  DEBUGGING  ##
+                conversations[user][1] = generate_questions(codeLines)          #  geneate and save list of questions
+                if(len(conversations[user][1]) > 0):            #  tutorQuestions was able to generate questions
+                    question = conversations[user][1].pop(0)    #  if there are questions pop the first one into question
+                    conversations[user][0] = question["Answer"] #  set the answer in user conversation value
+                    questionText = questionUnpacker(question)   #  unpack question text into string
+                else:                                           #  tutorQuestions failed to generate questions
+                    conversations[user][0] = 'A'                                #  for debugging (really want ans letter)
+                    questionText = "test question (answer A) A. B. C. D."       #  for debugging (really want question text)
                 conversations[user][2].append(text)
                 conversations[user][2].append(questionText)
                 bot.chat_postMessage(channel=channel,text=questionText)
@@ -70,10 +86,9 @@ def message(content):
                 conversations[user][2].append(correct)
                 bot.chat_postMessage(channel=channel,text=correct)
                 if(len(conversations[user][1]) > 0):            #  if there are still questions to ask
-                    #conversations[user][1] = generate_questions(codeLines)  #  not working on my computer
-                    #question = conversations[user][1].pop(0)                #  not working on my computer
-                    conversations[user][0] = 'A'                             #  for debugging (really want ans letter)
-                    questionText = "test question (answer A) A. B. C. D."    #  for debugging (really want question text)
+                    question = conversations[user][1].pop(0)
+                    conversations[user][0] = question["Answer"] #  set the answer in user conversation value
+                    questionText = questionUnpacker(question)   #  unpack question text into string
                     conversations[user][2].append(text)
                     conversations[user][2].append(questionText)
                     bot.chat_postMessage(channel=channel,text=questionText)
@@ -90,10 +105,9 @@ def message(content):
                 conversations[user][2].append(incorrect)
                 bot.chat_postMessage(channel=channel,text=incorrect)
                 if(len(conversations[user][1]) > 0):            #  if there are still questions to ask
-                    #conversations[user][1] = generate_questions(codeLines)      #  not working on my computer
-                    #question = conversations[user][1].pop(0)                    #  not working on my computer
-                    conversations[user][0] = 'A'                                 #  for debugging (really want ans letter)
-                    questionText = "test question (answer A) A. B. C. D."        #  for debugging (really want question text)
+                    question = conversations[user][1].pop(0)
+                    conversations[user][0] = question["Answer"] #  set the answer in user conversation value
+                    questionText = questionUnpacker(question)   #  unpack question text into string
                     conversations[user][2].append(text)
                     conversations[user][2].append(questionText)
                     bot.chat_postMessage(channel=channel,text=questionText)

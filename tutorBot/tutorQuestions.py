@@ -99,7 +99,7 @@ def check_indent(lines):
 def create_iData_type(line, index):
     
     # get the iData_type question as dictionary
-    question = question_df.set_index('Question Type').loc['iData Type'].to_dict()
+    question = question_df.set_index('Question Type').loc['iData Types'].to_dict()
     question_df.reset_index()
     print(question)                                                                                # debugging
     choices = data_types
@@ -219,7 +219,7 @@ def generate_questions(term_lists):
                 # print('Creating data type question')          
                 # create a data type question.
                 
-                dtq = question_df.set_index('Question Type').loc['Data Type']
+                dtq = question_df.set_index('Question Type').loc['Data Types']
                 question_df.reset_index()
                 question = dtq.iloc[randint(0, len(dtq) - 1)]
                 
