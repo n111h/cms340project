@@ -1,10 +1,13 @@
 import unittest
-from tutor_Question import check_question, check_indent, create_iData_type, generate_questions
+from tutorQuestions import check_question, check_indent, create_iData_type, generate_questions
 
 
 # UnitTesting for our components and its functions. 
 
 class Test_tutor_Question(unittest.TestCase):
+    
+    
+    # we check for check_question to see if it returns a list [0] when there has not been any questions generated
     
     def test_check_question_empty(self):
         
@@ -12,6 +15,9 @@ class Test_tutor_Question(unittest.TestCase):
         
         result = check_question(data)
         self.assertEqual(result, [0])
+    
+    # we check for check_question to see if it correctly recognizes the question that has been generated previously and return a list with the question id 
+    # this is for a case where single question has been generated.
     
     def test_check_question_single(self):
         
@@ -23,6 +29,9 @@ class Test_tutor_Question(unittest.TestCase):
         result = check_question(data)
         
         self.assertEqual(result,[1])
+        
+    #we check for check_question to see if it correctly recognizes the question that has been generated previously and return a list with the question id 
+    # this is for a case where multiple questions have been generated.
         
     def test_check_question_multiple(self):
         
@@ -37,7 +46,9 @@ class Test_tutor_Question(unittest.TestCase):
         result = check_question(data)
         
         self.assertEqual(result,[1,10])
-
+    
+    
+    
     def test_check_indent(self):
         
         data = [ [0,'def','hello', '(',')',':'],
@@ -88,6 +99,8 @@ class Test_tutor_Question(unittest.TestCase):
         q_type = result['id']
         self.assertEqual(q_type, 1)
     
+    # checking if the create_iData_type function will recognizes int and be able to correctly create answer and keys
+    
     def test_create_iData_type_int(self):
         
         data = [0,'x', '=', '9']
@@ -98,9 +111,7 @@ class Test_tutor_Question(unittest.TestCase):
         
         self.assertEqual(answer, 'int')
     
-    # def test_create_iData_type_list(self):
-        
-    #     data 
+    # checking if the create_iData_type function will recognizes boolean and be able to correctly create answer and keys
     
     def test_create_iData_type_bool(self):
         
@@ -114,7 +125,7 @@ class Test_tutor_Question(unittest.TestCase):
         self.assertEqual(answer, 'boolean')
     
     
-    # checking if it creates any questions at all. 
+    # checking if generate_questions function can create any questions at all. 
     
     def test_generate_questions(self):
         
@@ -125,6 +136,7 @@ class Test_tutor_Question(unittest.TestCase):
         
         self.assertNotEqual(len(questions),0)
         
+    # using the check_indent function we tested, we want to check if the generate question can generate a syntax question about indentation whose id is 10.
     
     def test_generate_questions_syntax(self):
         
@@ -137,8 +149,10 @@ class Test_tutor_Question(unittest.TestCase):
             
             if x['id'] == 10:
                 syntax = True
-        self.assertEqual(syntax, True)
+        self.assertTrue(syntax)
         
+    # using the create_iData_type we want to make sure if the generate_questions can create a set of questions that contains iData Type question
+    
     def test_generate_questions_iData(self):
         
         data = [[0, 'x', '=', '5']]
@@ -151,19 +165,7 @@ class Test_tutor_Question(unittest.TestCase):
                 idata = True
         self.assertEqual(idata, True)
     
-    def test_generate_questions_generic(self):
-        
-        data = [[0, 'x', '=', '5']]
-        
-        questions = generate_questions(data)
-        gqs = [11, 16]
-        generic = False
-        
-        for x in questions:
-            if x['id'] in gqs:
-                generic = True
-        self.assertEqual(generic, True)
-        
+    
     
 if __name__ == '__main__':
     unittest.main()

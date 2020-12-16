@@ -14,7 +14,7 @@
 import pandas as pd
 from random import randint, choice
 from ast import literal_eval
-
+import tutor_Parser
 ####  GLOBALS  #################################################################################################################
 question_df = pd.read_csv('Questions_11_27.csv')
 existing_q_id = []
@@ -99,7 +99,7 @@ def check_indent(lines):
 def create_iData_type(line, index):
     
     # get the iData_type question as dictionary
-    question = question_df.set_index('Question Type').loc['iData Types'].to_dict()
+    question = question_df.set_index('Question Type').loc['iData Type'].to_dict()
     question_df.reset_index()
     print(question)                                                                                # debugging
     choices = data_types
@@ -153,7 +153,7 @@ def create_iData_type(line, index):
         
         dummy = choice(choices)
         
-        while dummy in chosen:
+        while dummy in chosen or dummy == answer:
             dummy = choice(choices)
         
         chosen.append(dummy)
@@ -219,7 +219,7 @@ def generate_questions(term_lists):
                 # print('Creating data type question')          
                 # create a data type question.
                 
-                dtq = question_df.set_index('Question Type').loc['Data Types']
+                dtq = question_df.set_index('Question Type').loc['Data Type']
                 question_df.reset_index()
                 question = dtq.iloc[randint(0, len(dtq) - 1)]
                 
@@ -268,10 +268,24 @@ def generate_questions(term_lists):
     return questions
 
 
+    
 
 ####  MAIN  ####################################################################################################################
 
 def main():
-    print(questions)
+    
+    
+    user_inp = "```def func_one():\n    x = 15\n     y = 12 + x\n  for i in range(10):```"
 
+    if tutor_Parser.is_valid(user_inp) == True:
+        
+        user_inp = user_inp[3 : len(user_inp)-3]
+        # terms = tutor_Parser.callSplit(user_inp)
+    
+        questions = generate_questions(tutor_Parser.callSplit(user_inp))
+        print(questions)
+    else:
+        print("invalid input")
+        print(questions)
+    
 if(__name__=="__main__"): main()
