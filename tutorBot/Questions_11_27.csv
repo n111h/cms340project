@@ -1,5 +1,5 @@
-id ,Question Type,Question,A,B,C,D,Answer,Link
-1,Data Types,what is the data type of (variable name) ,int ,float,str,bool,(Depends on the parsing code),http://greenteapress.com/thinkpython/html/thinkpython003.html#toc12
+id,Question Type,Question,A,B,C,D,Answer,Link
+1,iData Types,what is the data type of (variable name) ,int ,float,str,bool,(Depends on the parsing code),http://greenteapress.com/thinkpython/html/thinkpython003.html#toc12
 2,Data Types,how many buit-in data type are there in python,5,4,6,3,A,http://greenteapress.com/thinkpython/html/thinkpython003.html#toc12
 3,Syntax,"what is the formal logical operator of ""and""? ",&&,||,!,%,A,
 4,Data Types,Tell me about = and == !,"""="" is used for assignment and ""=="" is used for equality","""="" is used for equality and ""=="" is used for assignment","both ""="" and ""=="" can be used as equality ","both ""="" and ""=="" can be used as assignment",A,http://greenteapress.com/thinkpython/html/thinkpython003.html#toc13
@@ -8,7 +8,7 @@ id ,Question Type,Question,A,B,C,D,Answer,Link
 7,Syntax,** arithmatic expression represents…,multiplication by 2,Exponents,multiplication,"Nothing, it is an invalid arithmatic operator",B,
 8,Data Types,Can you contain different types of data in a list?,Yes,No,,,Yes,
 9,Data Types,How can you store additional values to Python's list?,use append(),use add(),You can't add anything to a Python's list once it's initialized with some values,,A,
-10,Syntax ,Is indentation important in Python?,Yes it is important because it would make my code look nicer,Yes it is very important so that we and python can identify code blocks,"No, Python doesn't care, they can handle anything","No, because we can use semicolons and parentheses",B,
+10,Syntax,Is indentation important in Python?,Yes it is important because it would make my code look nicer,Yes it is very important so that we and python can identify code blocks,"No, Python doesn't care, they can handle anything","No, because we can use semicolons and parentheses",B,
 11,Generic,Who invented Python?,Alan Turing,Alan Kays,Guido van Rossum,Steve Jobs,C,
 12,Data Types,Explain String Concatenation,Python allows us to combine two different strings using + and = operators,"Python allows us to add and subtract two different strings using +, -, and = operator",Python allows you to change modify the string once it is declared,,A,
 13,Data Types,What is the return type of this function?,int ,float,str,bool,(Depends on the parsing code),
@@ -25,4 +25,4 @@ id ,Question Type,Question,A,B,C,D,Answer,Link
 24,Data Types,Can you use integers and floats interchangeably?,No,Yes,,,A,
 25,Data Types,What is the difference between a string and a character?,They are the same,"A string is a combination of characters, whereas a character is a single value",characters just have to be shorter than strings,,B,
 26,Syntax,What does ``` represent?,Block comments,In line comments,Character notation,Documentation string,D,
-27,Generic,How is NULL represented in Python?,NULL,\0',None,none,C,
+27,Generic,How is NULL represented in Python?,null,\0',None,none,C,
