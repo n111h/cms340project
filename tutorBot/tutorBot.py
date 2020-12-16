@@ -26,14 +26,14 @@ conversations = {}
 
 def questionUnpacker(q):
     qText = q["Question"]
-    if('A' in q):
-        qText += ("\nA. " + q['A'])
-    if('B' in q):
-        qText += ("\nB. " + q['B'])
-    if('C' in q):
-        qText += ("\nC. " + q['C'])
-    if('D' in q):
-        qText += ("\nD. " + q['D'])
+    if(str(q['A']) != "nan"):
+        qText += ("\nA. " + str(q['A']))
+    if(str(q['B']) != "nan"):
+        qText += ("\nB. " + str(q['B']))
+    if(str(q['C']) != "nan"):
+        qText += ("\nC. " + str(q['C']))
+    if(str(q['D']) != "nan"):
+        qText += ("\nD. " + str(q['D']))
     return(qText)
 
 ####  MAIN  ####################################################################################################################
@@ -67,6 +67,7 @@ def message(content):
                     question = conversations[user][1].pop(0)    #  if there are questions pop the first one into question
                     conversations[user][0] = question["Answer"] #  set the answer in user conversation value
                     questionText = questionUnpacker(question)   #  unpack question text into string
+                    print('',conversations[user][0],question,'',sep='\n')                                     ##  DEBUGGING  ##
                 else:                                           #  tutorQuestions failed to generate questions
                     conversations[user][0] = 'A'                                #  for debugging (really want ans letter)
                     questionText = "test question (answer A) A. B. C. D."       #  for debugging (really want question text)
@@ -89,11 +90,11 @@ def message(content):
                     question = conversations[user][1].pop(0)
                     conversations[user][0] = question["Answer"] #  set the answer in user conversation value
                     questionText = questionUnpacker(question)   #  unpack question text into string
+                    print('',conversations[user][0],question,'',sep='\n')                                     ##  DEBUGGING  ##
                     conversations[user][2].append(text)
                     conversations[user][2].append(questionText)
                     bot.chat_postMessage(channel=channel,text=questionText)
                 else:                                           #  no questions left to ask
-                    conversations[user][0] = False
                     prompt = "Post a code block to generate questions"
                     conversations[user][2].append(text)
                     conversations[user][2].append(prompt)
@@ -108,11 +109,11 @@ def message(content):
                     question = conversations[user][1].pop(0)
                     conversations[user][0] = question["Answer"] #  set the answer in user conversation value
                     questionText = questionUnpacker(question)   #  unpack question text into string
+                    print('',conversations[user][0],question,'',sep='\n')                                     ##  DEBUGGING  ##
                     conversations[user][2].append(text)
                     conversations[user][2].append(questionText)
                     bot.chat_postMessage(channel=channel,text=questionText)
                 else:                                           #  no questions left to ask
-                    conversations[user][0] = False
                     prompt = "Post a code block to generate questions"
                     conversations[user][2].append(text)
                     conversations[user][2].append(prompt)
