@@ -25,4 +25,4 @@ id ,Question Type,Question,A,B,C,D,Answer,Link
 24,Data Types,Can you use integers and floats interchangeably?,No,Yes,,,A,
 25,Data Types,What is the difference between a string and a character?,They are the same,"A string is a combination of characters, whereas a character is a single value",characters just have to be shorter than strings,,B,
 26,Syntax,What does ``` represent?,Block comments,In line comments,Character notation,Documentation string,D,
-27,Generic,How is NULL represented in Python?,NULL,\0',None,none,C,
+27,Generic,How is NULL represented in Python?,null,\0',None,none,C,

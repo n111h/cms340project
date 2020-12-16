@@ -153,7 +153,7 @@ def create_iData_type(line, index):
         
         dummy = choice(choices)
         
-        while dummy in chosen:
+        while dummy in chosen or dummy == answer:
             dummy = choice(choices)
         
         chosen.append(dummy)
